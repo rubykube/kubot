@@ -1,15 +1,17 @@
 module Kubot
   class Main < Clamp::Command
 
-    option "--loud", :flag, "say it loud"
-    option ["-n", "--iterations"], "N", "say it N times", :default => 1 do |s|
-      Integer(s)
+    subcommand "start", "Start the kubot" do
+      option "--token", "TOKEN", "Slack api token",
+        :environment_variable => "SLACK_API_TOKEN", :required => true
+      def execute
+        Kubot::Bot.run
+      end
     end
 
-    parameter "WORDS ...", "the thing to say", :attribute_name => :words
-
-    def execute
-      Kubot::Bot.run
+    option "--version", :flag, "Show version" do
+      puts Kubot::VERSION
+      exit(0)
     end
 
   end
